@@ -93,7 +93,6 @@ useSeoMeta({
           <h1>{{ product?.name }}</h1>
           <p>{{ product?.summary }}</p>
         </div>
-        <img :src="product?.image" :alt="product?.name" />
       </div>
     </section>
 
@@ -102,24 +101,36 @@ useSeoMeta({
       <a href="#specs">参数规格</a>
       <a href="#resources">软件及资料</a>
     </nav>
-    <section id="overview">
+    <section id="overview" class="detail-content-section">
+      <p class="detail-kicker">{{ product?.category }}</p>
       <h2>产品简介</h2>
       <p>{{ product?.overview }}</p>
     </section>
-    <section id="specs" class="muted">
-      <h2>参数规格</h2>
-      <dl>
-        <template v-for="item in product?.specs" :key="item[0]"
-          ><dt>{{ item[0] }}</dt>
-          <dd>{{ item[1] }}</dd></template
-        >
-      </dl>
+    <section id="specs" class="detail-band">
+      <div class="detail-section-head">
+        <div>
+          <p class="detail-kicker">产品参数</p>
+          <h2>参数规格</h2>
+        </div>
+        <p>{{ product?.summary }}</p>
+      </div>
+      <div class="detail-card-grid">
+        <article v-for="(item, index) in product?.specs" :key="item[0]" class="detail-info-card">
+          <span>{{ String(index + 1).padStart(2, '0') }}</span>
+          <strong>{{ item[0] }}</strong>
+          <p>{{ item[1] }}</p>
+        </article>
+      </div>
     </section>
-    <section id="resources">
+    <section id="resources" class="detail-content-section muted">
+      <p class="detail-kicker">应用与资料</p>
       <h2>软件及资料</h2>
-      <ul>
-        <li v-for="item in product?.uses" :key="item">{{ item }}</li>
-      </ul>
+      <div class="detail-card-grid">
+        <article v-for="(item, index) in product?.uses" :key="item" class="detail-info-card">
+          <span>{{ String(index + 1).padStart(2, '0') }}</span>
+          <strong>{{ item }}</strong>
+        </article>
+      </div>
       <a class="cta" href="/#contact">获取软件及资料</a>
     </section>
   </main>

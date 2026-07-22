@@ -20,8 +20,8 @@
 }
 
 .support-hero {
-  height: 25vh;
-  min-height: 128px;
+  height: var(--detail-hero-height);
+  min-height: var(--detail-hero-min-height);
   display: grid;
   place-items: center;
   padding: 12px 20px;
@@ -256,7 +256,7 @@
 
 @media (max-width: 900px) {
   .support-hero {
-    min-height: 144px;
+    min-height: var(--detail-hero-mobile-min-height);
   }
 
   .support-hero__content h1 {
@@ -289,7 +289,6 @@
   }
 
   .support-hero {
-    min-height: 156px;
     padding: 14px 18px;
   }
 

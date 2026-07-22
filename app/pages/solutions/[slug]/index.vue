@@ -60,7 +60,6 @@ useSeoMeta({
           locale === 'zh' ? '选择产品方向' : 'Select Product Direction'
         }}</a>
       </div>
-      <img :src="solution!.image" :alt="pick(solution!.name)" />
     </section>
 
     <nav

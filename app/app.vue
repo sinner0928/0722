@@ -12,9 +12,12 @@ const showInnerHeader = computed(() => route.path !== '/')
 
 <style>
 :root {
-  --brand-blue: #0369a1;
-  --brand-blue-rgb: 3, 105, 161;
+  --brand-blue: #1e48a5;
+  --brand-blue-rgb: 30, 72, 165;
   --brand-blue-bg: #f2f7fa;
+  --detail-hero-height: 25vh;
+  --detail-hero-min-height: 260px;
+  --detail-hero-mobile-min-height: 156px;
 }
 
 body,

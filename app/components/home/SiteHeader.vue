@@ -298,13 +298,16 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 }
 
 .global-site-header__inner {
-  width: min(1180px, calc(100% - 40px));
+  width: 100%;
+  max-width: 1320px;
   height: 72px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 24px;
   margin: 0 auto;
+  padding: 0 48px;
+  box-sizing: border-box;
 }
 
 .global-site-header__brand img {
@@ -650,6 +653,11 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 @media (max-width: 900px) {
   .global-site-header__inner {
     display: flex;
+    justify-content: space-between;
+  }
+
+  .global-site-header__actions {
+    margin-left: auto;
   }
 
   .global-site-header__nav,
@@ -681,9 +689,15 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
   }
 }
 
+@media (max-width: 760px) {
+  .global-site-header__inner {
+    padding: 0 20px;
+  }
+}
+
 @media (max-width: 560px) {
   .global-site-header__inner {
-    width: min(100% - 32px, 1180px);
+    width: 100%;
     height: 62px;
     gap: 12px;
   }

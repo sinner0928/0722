@@ -56,7 +56,6 @@ useSeoMeta({
         <p>{{ pick(direction!.text) }}</p>
         <a href="#overview">{{ locale === 'zh' ? '查看方向详情' : 'View Details' }}</a>
       </div>
-      <img :src="solution!.image" :alt="pick(direction!.title)" />
     </section>
 
     <nav
