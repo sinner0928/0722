@@ -1,85 +1,111 @@
 <script setup lang="ts">
 const { locale } = useSiteLocale()
 const submitted = ref(false)
+const submitting = ref(false)
+const errorMessage = ref('')
+const form = reactive({ name: '', email: '', phone: '', country: '', city: '' })
 
-const contactRoutes = computed(() => [
-  {
-    title: locale.value === 'zh' ? '销售咨询' : 'Sales Consultation',
-    description:
-      locale.value === 'zh'
-        ? '产品选型、批量供货和商务合作。'
-        : 'Product selection, supply planning and business cooperation.',
-  },
-  {
-    title: locale.value === 'zh' ? '技术支持' : 'Technical Support',
-    description:
-      locale.value === 'zh'
-        ? '协议栈定制、固件调试和参考方案咨询。'
-        : 'Protocol customization, firmware debugging and reference design advice.',
-  },
-  {
-    title: locale.value === 'zh' ? '样品申请' : 'Sample Request',
-    description:
-      locale.value === 'zh'
-        ? '样品、评估板和资料申请流程预留。'
-        : 'Reserved flow for samples, evaluation boards and technical materials.',
-  },
-])
+const copy = computed(() =>
+  locale.value === 'zh'
+    ? {
+        title: '\u8054\u7cfb\u6211\u4eec',
+        intro: '\u63d0\u4ea4\u9700\u6c42\u540e\uff0c\u6211\u4eec\u4f1a\u6839\u636e\u4ea7\u54c1\u65b9\u5411\u3001\u9879\u76ee\u9636\u6bb5\u548c\u4ea4\u4ed8\u76ee\u6807\u5b89\u6392\u8ddf\u8fdb\u3002',
+        routesLabel: '\u54a8\u8be2\u7c7b\u578b',
+        routes: [
+          ['\u9500\u552e\u54a8\u8be2', '\u4ea7\u54c1\u9009\u578b\u3001\u6279\u91cf\u4f9b\u8d27\u548c\u5546\u52a1\u5408\u4f5c\u3002'],
+          ['\u6280\u672f\u652f\u6301', '\u534f\u8bae\u6808\u5b9a\u5236\u3001\u56fa\u4ef6\u8c03\u8bd5\u548c\u53c2\u8003\u65b9\u6848\u54a8\u8be2\u3002'],
+          ['\u6837\u54c1\u7533\u8bf7', '\u6837\u54c1\u3001\u8bc4\u4f30\u677f\u548c\u8d44\u6599\u7533\u8bf7\u3002'],
+        ],
+        name: '\u59d3\u540d',
+        email: '\u90ae\u7bb1',
+        phone: '\u7535\u8bdd',
+        country: '\u56fd\u5bb6',
+        city: '\u57ce\u5e02',
+        submit: '\u63d0\u4ea4\u9700\u6c42',
+        submitting: '\u63d0\u4ea4\u4e2d...',
+        success: '\u63d0\u4ea4\u6210\u529f\uff0c\u6211\u4eec\u5df2\u6536\u5230\u60a8\u7684\u8054\u7cfb\u65b9\u5f0f\u3002',
+        error: '\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u586b\u5199\u5185\u5bb9\u540e\u91cd\u8bd5\u3002',
+      }
+    : {
+        title: 'Contact Us',
+        intro: 'Submit your requirements and our team will follow up based on your product direction and project stage.',
+        routesLabel: 'Consultation types',
+        routes: [
+          ['Sales Consultation', 'Product selection, supply planning and business cooperation.'],
+          ['Technical Support', 'Protocol customization, firmware debugging and reference design advice.'],
+          ['Sample Request', 'Samples, evaluation boards and technical material requests.'],
+        ],
+        name: 'Name',
+        email: 'Email',
+        phone: 'Phone',
+        country: 'Country',
+        city: 'City',
+        submit: 'Submit Request',
+        submitting: 'Submitting...',
+        success: 'Submitted successfully. We have received your contact details.',
+        error: 'The request could not be submitted. Please check the form and try again.',
+      },
+)
+
+const submitForm = async () => {
+  submitted.value = false
+  errorMessage.value = ''
+  submitting.value = true
+
+  try {
+    await $fetch('/api/contact', { method: 'POST', body: form })
+    submitted.value = true
+    form.name = ''
+    form.email = ''
+    form.phone = ''
+    form.country = ''
+    form.city = ''
+  } catch {
+    errorMessage.value = copy.value.error
+  } finally {
+    submitting.value = false
+  }
+}
 </script>
 
 <template>
   <section id="contact" class="contact-section">
     <header class="contact-section__header">
-      <h2>{{ locale === 'zh' ? '联系我们' : 'Contact Us' }}</h2>
-      <p>
-        {{
-          locale === 'zh'
-            ? '提交需求后，我们将根据产品方向、项目阶段和交付目标安排销售或技术支持跟进。'
-            : 'After you submit, our sales or technical team will follow up based on product ' +
-              'direction, project stage and delivery goals.'
-        }}
-      </p>
+      <h2>{{ copy.title }}</h2>
+      <p>{{ copy.intro }}</p>
     </header>
 
     <div class="contact-section__grid">
-      <div
-        class="contact-section__intro"
-        :aria-label="locale === 'zh' ? '咨询类型' : 'Consultation types'"
-      >
+      <div class="contact-section__intro" :aria-label="copy.routesLabel">
         <div class="contact-section__routes">
-          <article v-for="route in contactRoutes" :key="route.title" class="contact-section__route">
-            <h3>{{ route.title }}</h3>
-            <p>{{ route.description }}</p>
+          <article v-for="route in copy.routes" :key="route[0]" class="contact-section__route">
+            <h3>{{ route[0] }}</h3>
+            <p>{{ route[1] }}</p>
           </article>
         </div>
       </div>
 
-      <form class="contact-section__form" @submit.prevent="submitted = true">
-        <label for="contact-name">{{ locale === 'zh' ? '姓名' : 'Name' }}</label>
-        <input id="contact-name" required name="name" type="text" autocomplete="name" />
+      <form class="contact-section__form" @submit.prevent="submitForm">
+        <label for="contact-name">{{ copy.name }}</label>
+        <input id="contact-name" v-model="form.name" required name="name" type="text" autocomplete="name" />
 
-        <label for="contact-email">{{ locale === 'zh' ? '邮箱' : 'Email' }}</label>
-        <input id="contact-email" required name="email" type="email" autocomplete="email" />
+        <label for="contact-email">{{ copy.email }}</label>
+        <input id="contact-email" v-model="form.email" required name="email" type="email" autocomplete="email" />
 
-        <label for="contact-phone">{{ locale === 'zh' ? '电话' : 'Phone' }}</label>
-        <input id="contact-phone" name="phone" type="tel" autocomplete="tel" />
+        <label for="contact-phone">{{ copy.phone }}</label>
+        <input id="contact-phone" v-model="form.phone" required name="phone" type="tel" autocomplete="tel" />
 
-        <label for="contact-country">{{ locale === 'zh' ? '国家' : 'Country' }}</label>
-        <input id="contact-country" name="country" type="text" autocomplete="country-name" />
+        <label for="contact-country">{{ copy.country }}</label>
+        <input id="contact-country" v-model="form.country" required name="country" type="text" autocomplete="country-name" />
 
-        <label for="contact-city">{{ locale === 'zh' ? '城市' : 'City' }}</label>
-        <input id="contact-city" name="city" type="text" autocomplete="address-level2" />
+        <label for="contact-city">{{ copy.city }}</label>
+        <input id="contact-city" v-model="form.city" required name="city" type="text" autocomplete="address-level2" />
 
-        <button class="contact-section__submit" type="submit">
-          {{ locale === 'zh' ? '提交需求' : 'Submit Request' }}
+        <button class="contact-section__submit" type="submit" :disabled="submitting">
+          {{ submitting ? copy.submitting : copy.submit }}
         </button>
-        <p v-if="submitted" class="contact-section__success" role="status">
-          {{
-            locale === 'zh'
-              ? '已记录本次演示提交，正式接口接入后将发送至对应团队。'
-              : 'This demo submission is recorded locally; a backend can route it to the appropriate team later.'
-          }}
-        </p>
+        <p v-if="submitted" class="contact-section__success" role="status">{{ copy.success }}</p>
+        <p v-if="errorMessage" class="contact-section__error" role="alert">{{ errorMessage }}</p>
       </form>
     </div>
   </section>
@@ -123,12 +149,18 @@ const contactRoutes = computed(() => [
   align-items: start;
 }
 
-.contact-section__intro {
+.contact-section__intro,
+.contact-section__form {
   min-width: 0;
 }
 
-.contact-section__routes {
+.contact-section__routes,
+.contact-section__form {
   display: grid;
+  gap: 10px;
+}
+
+.contact-section__routes {
   gap: 14px;
 }
 
@@ -137,9 +169,7 @@ const contactRoutes = computed(() => [
   border-radius: 8px;
   padding: 22px;
   background: #fff;
-  transition:
-    border-color 180ms ease,
-    background-color 180ms ease;
+  transition: border-color 180ms ease, background-color 180ms ease;
 }
 
 .contact-section__route:hover {
@@ -158,13 +188,9 @@ const contactRoutes = computed(() => [
 }
 
 .contact-section__form {
-  display: grid;
-  gap: 10px;
   padding: 0;
   border: 0;
-  border-radius: 0;
   background: transparent;
-  box-shadow: none;
 }
 
 .contact-section__form label {
@@ -195,6 +221,7 @@ const contactRoutes = computed(() => [
 .contact-section__submit {
   width: 100%;
   min-height: 44px;
+  margin-top: 6px;
   border: 1px solid transparent;
   border-radius: 6px;
   padding: 0 18px;
@@ -204,36 +231,28 @@ const contactRoutes = computed(() => [
   cursor: pointer;
 }
 
-.contact-section__submit:hover {
-  background: var(--brand-blue-bg);
+.contact-section__submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 
-.contact-section__success {
+.contact-section__success,
+.contact-section__error {
   margin: -2px 0 0;
-  color: #5e6874;
   font-size: 13px;
   line-height: 1.5;
 }
 
+.contact-section__success { color: #5e6874; }
+.contact-section__error { color: #b42318; }
+
 @media (max-width: 1180px) {
-  .contact-section__grid {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
+  .contact-section__grid { grid-template-columns: 1fr; gap: 48px; }
 }
 
 @media (max-width: 760px) {
-  .contact-section {
-    padding-right: 20px;
-    padding-left: 20px;
-  }
-
-  .contact-section__header {
-    margin-bottom: 52px;
-  }
-
-  .contact-section__header h2 {
-    font-size: 38px;
-  }
+  .contact-section { padding-right: 20px; padding-left: 20px; }
+  .contact-section__header { margin-bottom: 52px; }
+  .contact-section__header h2 { font-size: 38px; }
 }
 </style>

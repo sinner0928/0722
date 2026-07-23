@@ -1,5 +1,5 @@
 .detail-page {
-  background: #f4f7fb;
+  background: #fff;
   color: #172033;
   font-family: 'Microsoft YaHei', Arial, sans-serif;
 }
@@ -10,10 +10,10 @@
   align-items: center;
   gap: 8px;
   margin: 0 auto;
-  padding: 17px 0;
-  color: #003f8f;
+  padding: 13px 0;
+  color: var(--brand-blue);
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .detail-breadcrumb strong {
