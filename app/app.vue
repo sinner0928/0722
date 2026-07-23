@@ -18,6 +18,11 @@ const showInnerHeader = computed(() => route.path !== '/')
   --detail-hero-height: 25vh;
   --detail-hero-min-height: 260px;
   --detail-hero-mobile-min-height: 156px;
+  --site-font: 'Microsoft YaHei', 'Source Sans 3', Arial, sans-serif;
+}
+
+body {
+  font-family: var(--site-font);
 }
 
 body,

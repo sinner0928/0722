@@ -20,7 +20,7 @@ const supportIcons = {
     </header>
 
     <div class="support-center__body">
-      <nav class="support-center__links shell" :aria-label="pick(labels.support)">
+      <nav class="support-center__links home-shell" :aria-label="pick(labels.support)">
         <NuxtLink
           v-for="item in supportSections"
           :key="item.slug"

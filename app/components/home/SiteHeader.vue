@@ -25,6 +25,12 @@ const searchTerm = ref('')
 
 const activeMegaPanel = computed(() => megaPanels.find((panel) => panel.id === activePanel.value))
 const panelOpen = computed(() => Boolean(activeMegaPanel.value))
+const isHomeTransparent = computed(
+  () => props.homeMode && !props.scrolled && !props.navOnLight && !panelOpen.value,
+)
+const isHomeLight = computed(
+  () => props.homeMode && !props.scrolled && (props.navOnLight || panelOpen.value),
+)
 const searchIndex = computed(() => buildSearchIndex(locale.value))
 const popularLinks = computed(() => searchIndex.value.slice(0, 6))
 const panelRoutes: Record<string, string> = {
@@ -119,6 +125,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
       scrolled,
       'nav-on-light': navOnLight,
       'panel-open': panelOpen,
+      'is-home-transparent': isHomeTransparent,
+      'is-home-light': isHomeLight,
     }"
   >
     <div class="global-site-header__inner">
@@ -334,39 +342,25 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
   font-weight: 700;
 }
 
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__nav
-  button,
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__search,
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__language,
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__menu {
+.global-site-header.is-home-transparent .global-site-header__nav button,
+.global-site-header.is-home-transparent .global-site-header__search,
+.global-site-header.is-home-transparent .global-site-header__language,
+.global-site-header.is-home-transparent .global-site-header__menu {
   color: #fff;
 }
 
-.global-site-header.home-mode.panel-open .global-site-header__nav button,
-.global-site-header.home-mode.panel-open .global-site-header__search,
-.global-site-header.home-mode.panel-open .global-site-header__language,
-.global-site-header.home-mode.panel-open .global-site-header__menu {
+.global-site-header.is-home-light .global-site-header__nav button,
+.global-site-header.is-home-light .global-site-header__search,
+.global-site-header.is-home-light .global-site-header__language,
+.global-site-header.is-home-light .global-site-header__menu {
   color: #172033;
 }
 
-.global-site-header.home-mode.nav-on-light:not(.scrolled) .global-site-header__nav button,
-.global-site-header.home-mode.nav-on-light:not(.scrolled) .global-site-header__search,
-.global-site-header.home-mode.nav-on-light:not(.scrolled) .global-site-header__language,
-.global-site-header.home-mode.nav-on-light:not(.scrolled) .global-site-header__menu {
-  color: #172033;
-}
-
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__brand
-  img {
+.global-site-header.is-home-transparent .global-site-header__brand img {
   filter: brightness(0) invert(1);
 }
 
-.global-site-header.home-mode.panel-open .global-site-header__brand img {
+.global-site-header.is-home-light .global-site-header__brand img {
   filter: none;
 }
 
@@ -387,18 +381,10 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
   box-shadow: inset 0 -2px 0 var(--brand-blue);
 }
 
-.global-site-header.home-mode:not(.scrolled):not(.panel-open)
-  .global-site-header__nav
-  button.active {
+.global-site-header.is-home-transparent .global-site-header__nav button.active {
   background: rgba(255, 255, 255, 0.14);
   color: #fff;
   box-shadow: inset 0 -2px 0 currentColor;
-}
-
-.global-site-header.home-mode.panel-open .global-site-header__nav button.active {
-  background: var(--brand-blue-bg);
-  color: var(--brand-blue);
-  box-shadow: inset 0 -2px 0 var(--brand-blue);
 }
 
 .global-site-header__nav button:hover,
@@ -409,23 +395,6 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 .global-site-header__language:focus-visible {
   color: var(--brand-blue);
   outline: none;
-}
-
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__nav
-  button:hover,
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__nav
-  button:focus-visible,
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__search:hover,
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__search:focus-visible,
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__language:hover,
-.global-site-header.home-mode:not(.scrolled):not(.nav-on-light):not(.panel-open)
-  .global-site-header__language:focus-visible {
-  color: var(--brand-blue);
 }
 
 .global-site-header__actions {

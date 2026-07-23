@@ -8,10 +8,14 @@ const activeCategory = ref('all')
 
 const section = computed(() => supportSections.find((item) => item.slug === route.params.section))
 const sectionRows = computed(() => section.value?.rows ?? [])
+const faqs = computed(() => {
+  const currentSection = section.value
+  return currentSection && 'faqs' in currentSection ? currentSection.faqs : []
+})
 const categoryOptions = computed(() => {
   const categories = sectionRows.value.map((row) => ({
-    key: row[2],
-    label: locale.value === 'zh' ? row[2] : row[3],
+    key: row.category.zh,
+    label: pick(row.category),
   }))
   const unique = categories.filter(
     (item, index, array) => array.findIndex((entry) => entry.key === item.key) === index,
@@ -21,11 +25,8 @@ const categoryOptions = computed(() => {
 const rows = computed(() => {
   const term = keyword.value.trim().toLowerCase()
   return sectionRows.value.filter((row) => {
-    const matchesCategory = activeCategory.value === 'all' || row[2] === activeCategory.value
-    const text =
-      locale.value === 'zh'
-        ? `${row[0]} ${row[2]} ${row[4]} ${row[6]}`
-        : `${row[1]} ${row[3]} ${row[5]} ${row[7]}`
+    const matchesCategory = activeCategory.value === 'all' || row.category.zh === activeCategory.value
+    const text = `${pick(row.name)} ${pick(row.category)} ${pick(row.description)} ${pick(row.status)}`
     return matchesCategory && (!term || text.toLowerCase().includes(term))
   })
 })
@@ -128,16 +129,16 @@ useSeoMeta({
               </tr>
             </thead>
             <tbody>
-              <tr v-for="row in rows" :key="row[0]">
+              <tr v-for="row in rows" :key="row.name.zh">
                 <td>
-                  <strong>{{ locale === 'zh' ? row[0] : row[1] }}</strong>
+                  <strong>{{ pick(row.name) }}</strong>
                 </td>
                 <td>
-                  <span>{{ locale === 'zh' ? row[2] : row[3] }}</span>
+                  <span>{{ pick(row.category) }}</span>
                 </td>
-                <td>{{ locale === 'zh' ? row[4] : row[5] }}</td>
+                <td>{{ pick(row.description) }}</td>
                 <td>
-                  <em>{{ locale === 'zh' ? row[6] : row[7] }}</em>
+                  <em>{{ pick(row.status) }}</em>
                 </td>
                 <td>
                   <a href="/#contact">{{ locale === 'zh' ? '联系技术支持' : 'Contact Support' }}</a>
@@ -154,6 +155,26 @@ useSeoMeta({
               : 'No matching resources found. Try another keyword or contact support.'
           }}
         </p>
+
+        <section
+          v-if="faqs.length"
+          class="support-faq"
+          :aria-label="locale === 'zh' ? '常见问题' : 'Frequently asked questions'"
+        >
+          <div class="support-section-title">
+            <div>
+              <p>{{ locale === 'zh' ? '常见问题' : 'Frequently Asked Questions' }}</p>
+              <h2>{{ locale === 'zh' ? '快速了解支持流程' : 'Support Process at a Glance' }}</h2>
+            </div>
+          </div>
+
+          <div class="support-faq__list">
+            <details v-for="faq in faqs" :key="faq.question.zh">
+              <summary>{{ pick(faq.question) }}</summary>
+              <p>{{ pick(faq.answer) }}</p>
+            </details>
+          </div>
+        </section>
       </section>
     </div>
   </main>

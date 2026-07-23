@@ -6,7 +6,7 @@ const { locale, pick } = useSiteLocale()
 
 <template>
   <section id="products" class="product-showcase">
-    <div class="shell">
+    <div class="home-shell">
       <h2>{{ pick(labels.products) }}</h2>
       <div class="product-tabs">
         <NuxtLink

@@ -1,6 +1,5 @@
 .support-page {
   color: #172033;
-  font-family: 'Microsoft YaHei', Arial, sans-serif;
 }
 
 .support-breadcrumb {
@@ -252,6 +251,40 @@
 .support-empty {
   margin: 22px 0 0;
   color: #64748b;
+}
+
+.support-faq {
+  margin-top: 44px;
+}
+
+.support-faq__list {
+  display: grid;
+  gap: 10px;
+}
+
+.support-faq details {
+  border: 1px solid #d7e0e8;
+  background: #fff;
+}
+
+.support-faq summary {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  padding: 12px 18px;
+  color: #172033;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.support-faq details[open] summary {
+  border-bottom: 1px solid #d7e0e8;
+}
+
+.support-faq details p {
+  margin: 0;
+  padding: 14px 18px 18px;
+  color: #526277;
 }
 
 @media (max-width: 900px) {

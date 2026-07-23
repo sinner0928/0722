@@ -66,7 +66,7 @@ onMounted(() => {
 
 <template>
   <section id="solutions" class="solution-carousel">
-    <div class="shell">
+    <div class="home-shell">
       <h2>{{ pick(labels.solutions) }}</h2>
 
       <div

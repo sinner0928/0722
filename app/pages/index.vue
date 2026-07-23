@@ -134,7 +134,7 @@ useSeoMeta({
         :class="{ 'slide-light': heroSlides[activeSlide].navTone === 'dark' }"
         :aria-label="locale === 'zh' ? '首页轮播图' : 'Home carousel'"
       >
-        <div class="shell hero-grid">
+        <div class="home-shell hero-grid">
           <div class="hero-copy">
             <p class="eyebrow">{{ locale === 'zh' ? '产品与解决方案' : 'Products & Solutions' }}</p>
             <div class="hero-copy-slides">
@@ -220,7 +220,6 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--paper);
-  font-family: 'Microsoft YaHei', 'Source Sans 3', Arial, sans-serif;
   line-height: 1.55;
 }
 a {
@@ -236,7 +235,7 @@ button,
 a {
   touch-action: manipulation;
 }
-.shell {
+.home-shell {
   width: min(1180px, calc(100% - 40px));
   margin: auto;
 }
@@ -557,7 +556,7 @@ a {
   }
 }
 @media (max-width: 560px) {
-  .shell {
+  .home-shell {
     width: min(100% - 32px, 1180px);
   }
   .hero {

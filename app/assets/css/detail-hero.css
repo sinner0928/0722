@@ -1,0 +1,19 @@
+.detail-hero,
+.solution-page .solution-hero {
+  display: grid;
+  height: var(--detail-hero-height);
+  min-height: var(--detail-hero-min-height);
+  place-items: center;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 15, 35, 0.98) 0%,
+      rgba(6, 33, 68, 0.92) 48%,
+      rgba(94, 137, 174, 0.78) 100%
+    ),
+    url('/assets/support-tools-banner.png') center / cover no-repeat;
+  text-align: center;
+  overflow: hidden;
+}

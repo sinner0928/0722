@@ -6,7 +6,7 @@ const { locale, pick } = useSiteLocale()
 
 <template>
   <section id="company" class="company-section">
-    <div class="shell company-section__inner">
+    <div class="home-shell company-section__inner">
       <header class="company-section__header">
         <h2>{{ pick(labels.company) }}</h2>
         <p>
